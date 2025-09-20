@@ -5,9 +5,23 @@ import cocotb
 from cocotb.clock import Clock
 from cocotb.triggers import RisingEdge
 from cocotb.triggers import FallingEdge
+from cocotb.triggers import ValueChange
 from cocotb.triggers import ClockCycles
 from cocotb.types import Logic
 from cocotb.types import LogicArray
+
+async def RisingEdgeBit(signal, bit):
+    while True:
+        await ValueChange(signal)
+        if signal.value[bit] == 1:
+            return
+
+async def FallingEdgeBit(signal, bit):
+    while True:
+        await ValueChange(signal)
+        if signal.value[bit] == 0:
+            return
+        
 
 async def await_half_sclk(dut):
     """Wait for the SCLK signal to go high or low."""
@@ -167,9 +181,9 @@ async def test_pwm_freq(dut):
 
     await ClockCycles(dut.clk, 1000)
 
-    await RisingEdge(dut.pwm_bit0)
+    await RisingEdgeBit(dut.uo_out, 0)
     t1 = cocotb.utils.get_sim_time('ns')
-    await RisingEdge(dut.pwm_bit0)
+    await FallingEdgeBit(dut.uo_out, 0)
     t2 = cocotb.utils.get_sim_time('ns')
 
     period_ns = t2 - t1
@@ -205,11 +219,11 @@ async def test_pwm_duty(dut):
             
             duty = 100.0
         else:
-            await RisingEdge(dut.pwm_bit0)
+            await RisingEdgeBit(dut.uo_out, 0)
             t1 = cocotb.utils.get_sim_time('ns')
-            await FallingEdge(dut.pwm_bit0)
+            await FallingEdgeBit(dut.uo_out, 0)
             t2 = cocotb.utils.get_sim_time('ns')
-            await RisingEdge(dut.pwm_bit0)
+            await RisingEdgeBit(dut.uo_out, 0)
             t3 = cocotb.utils.get_sim_time('ns')
 
             high_time = t2 - t1
