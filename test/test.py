@@ -6,7 +6,7 @@ from cocotb.clock import Clock
 from cocotb.triggers import RisingEdge
 from cocotb.triggers import FallingEdge
 # from cocotb.triggers import ValueChange
-from cocotb.triggers import Edge
+from cocotb.triggers import Edge, ReadOnly
 from cocotb.triggers import ClockCycles
 from cocotb.types import Logic
 from cocotb.types import LogicArray
@@ -28,22 +28,16 @@ async def FallingEdgeBit(signal, bit):
 """       
  # value change doesnt work with gh actions so im trying this instead
 async def RisingEdgeBit(signal, bit):
-    prev = signal.value[bit]
     while True:
-        await Edge(signal) 
-        current = signal.value[bit]
-        if prev == 0 and current == 1:
+        await RisingEdge(signal)              
+        if int(signal.value[bit]) == 1:       
             return
-        prev = current
 
 async def FallingEdgeBit(signal, bit):
-    prev = signal.value[bit]
     while True:
-        await Edge(signal) 
-        current = signal.value[bit]
-        if prev == 1 and current == 0:
+        await FallingEdge(signal)              
+        if int(signal.value[bit]) == 0:       
             return
-        prev = current
 
 
 async def await_half_sclk(dut):
@@ -204,9 +198,9 @@ async def test_pwm_freq(dut):
 
     await ClockCycles(dut.clk, 1000)
 
-    await RisingEdgeBit(dut.uo_out, 0)
+    await RisingEdge(dut.uo_out_bit0)
     t1 = cocotb.utils.get_sim_time('ns')
-    await FallingEdgeBit(dut.uo_out, 0)
+    await FallingEdge(dut.uo_out_bit0)
     t2 = cocotb.utils.get_sim_time('ns')
 
     period_ns = t2 - t1
@@ -242,11 +236,11 @@ async def test_pwm_duty(dut):
             
             duty = 100.0
         else:
-            await RisingEdgeBit(dut.uo_out, 0)
+            await RisingEdge(dut.uo_out_bit0)
             t1 = cocotb.utils.get_sim_time('ns')
-            await FallingEdgeBit(dut.uo_out, 0)
+            await FallingEdge(dut.uo_out_bit0)
             t2 = cocotb.utils.get_sim_time('ns')
-            await RisingEdgeBit(dut.uo_out, 0)
+            await RisingEdge(dut.uo_out_bit0)
             t3 = cocotb.utils.get_sim_time('ns')
 
             high_time = t2 - t1

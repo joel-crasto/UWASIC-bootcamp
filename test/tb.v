@@ -23,6 +23,11 @@ module tb ();
   wire [7:0] uio_out;
   wire [7:0] uio_oe;
   
+  //`ifdef COCOTB_SIM
+  wire uo_out_bit0;
+  //`endif
+  assign uo_out_bit0 = uo_out[0];
+  
 `ifdef GL_TEST
   wire VPWR = 1'b1;
   wire VGND = 1'b0;
@@ -45,6 +50,9 @@ module tb ();
       .ena    (ena),      // enable - goes high when design is selected
       .clk    (clk),      // clock
       .rst_n  (rst_n)     // not reset
+      //`ifdef COCOTB_SIM
+      //,.uo_out_bit0(uo_out_bit0)
+      //`endif
   );
 
 endmodule

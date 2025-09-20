@@ -31,6 +31,8 @@ VERILOG_SOURCES += $(PWD)/gate_level_netlist.v
 
 endif
 
+
+
 # Allow sharing configuration between design and testbench via `include`:
 COMPILE_ARGS 		+= -I$(SRC_DIR)
 
@@ -40,6 +42,8 @@ TOPLEVEL = tb
 
 # MODULE is the basename of the Python test file
 MODULE = test
+
+COMPILE_ARGS += -DCOCOTB_SIM
 
 # include cocotb's make rules to take care of the simulator setup
 include $(shell cocotb-config --makefiles)/Makefile.sim
