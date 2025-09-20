@@ -13,14 +13,15 @@ module tt_um_uwasic_onboarding_joel_crasto (
     output wire [7:0] uio_oe,   // IOs: Enable path (active high: 0=input, 1=output)
     input  wire       ena,      // always 1 when the design is powered, so you can ignore it
     input  wire       clk,      // clock
-    input  wire       rst_n,     // reset_n - low to reset
-
-    // output wire     pwm_bit0 // used for cocotb tests, commented out to pass gds test
+    input  wire       rst_n     // reset_n - low to reset
 );
 
   // All output pins must be assigned. If not used, assign to 0.
   assign uio_oe  = 8'hFF;
-  // assign pwm_bit0 = uo_out[0];
+
+
+  wire     pwm_bit0;
+  assign pwm_bit0 = uo_out[0];
 
   wire [7:0] en_reg_out_7_0;
   wire [7:0] en_reg_out_15_8;
