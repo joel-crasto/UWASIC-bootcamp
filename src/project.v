@@ -21,8 +21,7 @@ module tt_um_uwasic_onboarding_joel_crasto (
 
   // All output pins must be assigned. If not used, assign to 0.
   assign uio_oe  = 8'hFF;
-  assign uo_out = pwm_duty_cycle;
-  assign uio_out = en_reg_out_7_0;
+  
 
 //`ifdef COCOTB_SIM
 //  assign uo_out_bit0 = uo_out[0];
@@ -34,6 +33,10 @@ module tt_um_uwasic_onboarding_joel_crasto (
   wire [7:0] en_reg_pwm_15_8;
   wire [7:0] pwm_duty_cycle;
 
+  wire [15:0] periph_out;
+
+  assign uo_out = periph_out[7:0];
+  assign uio_out = periph_out[15:8];
    
 
 
@@ -45,7 +48,7 @@ module tt_um_uwasic_onboarding_joel_crasto (
       .en_reg_pwm_7_0(en_reg_pwm_7_0),
       .en_reg_pwm_15_8(en_reg_pwm_15_8),
       .pwm_duty_cycle(pwm_duty_cycle),
-      .out({uio_out, uo_out})
+      .out(periph_out)
   );
 
 
