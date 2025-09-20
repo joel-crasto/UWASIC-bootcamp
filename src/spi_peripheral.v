@@ -42,7 +42,7 @@ module spi_peripheral (
 
     reg SCLK_prev;
     wire SCLK_rising = (SCLK_sync2 == 1'b1) && (SCLK_prev == 1'b0);
-    wire SCLK_falling = (SCLK_sync2 == 1'b0) && (SCLK_prev == 1'b1);
+    // wire SCLK_falling = (SCLK_sync2 == 1'b0) && (SCLK_prev == 1'b1);
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) SCLK_prev <= 1'b0;

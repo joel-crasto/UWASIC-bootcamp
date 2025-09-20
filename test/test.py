@@ -11,6 +11,7 @@ from cocotb.triggers import ClockCycles
 from cocotb.types import Logic
 from cocotb.types import LogicArray
 
+
 """
 async def RisingEdgeBit(signal, bit):
     while True:
@@ -23,20 +24,27 @@ async def FallingEdgeBit(signal, bit):
         await ValueChange(signal)
         if signal.value[bit] == 0:
             return
- """       
-# value change doesnt work with gh actions so im trying this instead
+ 
+"""       
+ # value change doesnt work with gh actions so im trying this instead
 async def RisingEdgeBit(signal, bit):
+    prev = signal.value[bit]
     while True:
         await Edge(signal) 
-        if int(signal.value[bit]) == 1:
+        current = signal.value[bit]
+        if prev == 0 and current == 1:
             return
+        prev = current
 
 async def FallingEdgeBit(signal, bit):
+    prev = signal.value[bit]
     while True:
-        await Edge(signal)
-        if int(signal.value[bit]) == 0:
+        await Edge(signal) 
+        current = signal.value[bit]
+        if prev == 1 and current == 0:
             return
-        
+        prev = current
+
 
 async def await_half_sclk(dut):
     """Wait for the SCLK signal to go high or low."""
