@@ -15,7 +15,7 @@ module tt_um_uwasic_onboarding_joel_crasto (
     input  wire       clk,      // clock
     input  wire       rst_n,     // reset_n - low to reset
 
-    output wire     pwm_bit0
+    // output wire     pwm_bit0 // used for cocotb tests, commented out to pass gds test
 );
 
   // All output pins must be assigned. If not used, assign to 0.
