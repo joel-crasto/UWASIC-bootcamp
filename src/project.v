@@ -20,7 +20,7 @@ module tt_um_uwasic_onboarding_joel_crasto (
 
   // All output pins must be assigned. If not used, assign to 0.
   assign uio_oe  = 8'hFF;
-  assign pwm_bit0 = uo_out[0];
+  // assign pwm_bit0 = uo_out[0];
 
   wire [7:0] en_reg_out_7_0;
   wire [7:0] en_reg_out_15_8;
