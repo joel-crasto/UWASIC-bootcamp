@@ -5,11 +5,13 @@ import cocotb
 from cocotb.clock import Clock
 from cocotb.triggers import RisingEdge
 from cocotb.triggers import FallingEdge
-from cocotb.triggers import ValueChange
+# from cocotb.triggers import ValueChange
+from cocotb.triggers import Edge
 from cocotb.triggers import ClockCycles
 from cocotb.types import Logic
 from cocotb.types import LogicArray
 
+"""
 async def RisingEdgeBit(signal, bit):
     while True:
         await ValueChange(signal)
@@ -20,6 +22,19 @@ async def FallingEdgeBit(signal, bit):
     while True:
         await ValueChange(signal)
         if signal.value[bit] == 0:
+            return
+ """       
+# value change doesnt work with gh actions so im trying this instead
+async def RisingEdgeBit(signal, bit):
+    while True:
+        await Edge(signal) 
+        if int(signal.value[bit]) == 1:
+            return
+
+async def FallingEdgeBit(signal, bit):
+    while True:
+        await Edge(signal)
+        if int(signal.value[bit]) == 0:
             return
         
 
