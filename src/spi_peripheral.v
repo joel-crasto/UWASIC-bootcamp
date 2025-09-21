@@ -138,6 +138,7 @@ module spi_peripheral (
             en_reg_pwm_7_0   <= 8'h00;
             en_reg_pwm_15_8  <= 8'h00;
             pwm_duty_cycle   <= 8'h00;
+            transaction_processed <= 1'b0;
         end else begin
             if (transaction_ready && !transaction_processed) begin
                 
@@ -155,6 +156,9 @@ module spi_peripheral (
                 end
                 
                 transaction_processed <= 1'b1;
+            end else if (transaction_processed) begin
+                transaction_ready <= 1'b0;
+                transaction_processed <= 1'b0;
             end
         end
     end
