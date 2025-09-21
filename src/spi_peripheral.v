@@ -81,8 +81,6 @@ module spi_peripheral (
             addr_sr               <= 7'd0;
             data_sr               <= 8'd0;
             frame_valid           <= 1'b0;
-            transaction_ready     <= 1'b0;
-            transaction_processed <= 1'b0;
         end else begin
             
             if (nCS_negedge) begin
@@ -137,7 +135,7 @@ module spi_peripheral (
             if (frame_valid) begin
                 transaction_ready <= 1'b1;
             end
-            
+
             if (transaction_ready && !transaction_processed) begin
                 
                 if (frame_valid && rw_bit == 1'b1) begin
