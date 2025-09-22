@@ -200,12 +200,16 @@ async def test_pwm_freq(dut):
 
     await RisingEdge(dut.uo_out_bit0)
     t1 = cocotb.utils.get_sim_time('ns')
-    await FallingEdge(dut.uo_out_bit0)
+    await RisingEdge(dut.uo_out_bit0)
     t2 = cocotb.utils.get_sim_time('ns')
 
     period_ns = t2 - t1
     freq_hz = 1e9 / period_ns
     dut._log.info(f"Measured frequency = {freq_hz:.2f} Hz")
+
+    assert abs(freq_hz - 3000) <= 30, \
+        f"Expected 3000 Hz, got {freq_hz} Hz"
+
 
     dut._log.info("PWM Frequency test completed successfully")
 
@@ -248,6 +252,12 @@ async def test_pwm_duty(dut):
             duty = (high_time / period) * 100.0
 
         dut._log.info(f"duty={duty:.1f}% for reg={value:#04x}")
+
+        assert abs(duty - expected_pct) <= 5, \
+            f"Expected duty ~{expected_pct}%, got {duty}%"
+
+
+
     # check edge cases
     await check_duty(0x00, 0.0)     # 0%
     await check_duty(0x80, 50.0)    # ~50%

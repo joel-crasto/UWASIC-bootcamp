@@ -68,8 +68,7 @@ module spi_peripheral (
     reg [6:0]  addr_sr;              
     reg [7:0]  data_sr;             
 
-    reg        frame_valid;          
-    reg        transaction_ready;    
+    reg        frame_valid;           
     reg        transaction_processed;
 
 
@@ -129,17 +128,13 @@ module spi_peripheral (
             en_reg_pwm_7_0   <= 8'h00;
             en_reg_pwm_15_8  <= 8'h00;
             pwm_duty_cycle   <= 8'h00;
-            transaction_ready <= 1'b0;
             transaction_processed <= 1'b0;
         end else begin
             if (frame_valid) begin
-                transaction_ready <= 1'b1;
             end
 
-            if (transaction_ready && !transaction_processed) begin
-                
-                if (frame_valid && rw_bit == 1'b1) begin
-                    if (addr_sr <= MAX_ADDRESS) begin
+            if (frame_valid && !transaction_processed) begin
+                    if (rw_bit == 1'b1 && addr_sr <= MAX_ADDRESS) begin
                         case (addr_sr)
                             7'd0: en_reg_out_7_0  <= data_sr;
                             7'd1: en_reg_out_15_8 <= data_sr;
@@ -149,11 +144,8 @@ module spi_peripheral (
                             default: ; 
                         endcase
                     end
-                end
-                
                 transaction_processed <= 1'b1;
             end else if (transaction_processed) begin
-                transaction_ready <= 1'b0;
                 transaction_processed <= 1'b0;
             end
         end
